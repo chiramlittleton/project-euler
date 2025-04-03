@@ -7,33 +7,22 @@ public class Solution {
     }
 
     private static int sumOfAmicableNumbers(int limit){
-        int[] sumOfDivisors = new int[limit];
-        // fill array with divisors
-        for(int i = 0; i < limit; i++){
-            sumOfDivisors[i] = sumOfDivisors(i);
-        }
-
-        // Iterate through array checking for amicable numbers
+        // For each number, calculate the sum of divisors, then calculate the sum of divisors for that number
         Set<Integer> amicableNumbers = new HashSet<>();
-        for(int i = 0; i<limit; i++){
-            int potentialPairA = sumOfDivisors[i];
-            if(potentialPairA < limit){
-                int potentialPairB = sumOfDivisors[potentialPairA];
-                if(i == 220){
-                    System.out.println(potentialPairA +" "+potentialPairB);
-                }
-                if(potentialPairB == i){
-                    amicableNumbers.add(potentialPairA);
-                    amicableNumbers.add(potentialPairB);
-                }
+
+        for(int a = 1; a < limit; a++){
+            int b = sumOfDivisors(a);
+            int dB = sumOfDivisors(b);
+
+            if(a != b && dB == a){
+                amicableNumbers.add(a);
+                amicableNumbers.add(b);
             }
         }
 
-        int sum = 0;
-        for(Integer num : amicableNumbers){
-            sum += num;
-        }
-        return sum;
+        return amicableNumbers.stream()
+                                .mapToInt(Integer::intValue)
+                                .sum();
     }
 
     private static int sumOfDivisors(int num){
